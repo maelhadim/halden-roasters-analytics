@@ -3,7 +3,8 @@
 The scripts are generated from the files themselves, so a column added to an export can never
 be missing from its query. Each script:
 
-- reads the path from the workbook's `DataFolder` cell, so the pack works from any folder;
+- reads the path from the workbook's `DataFolder` cell, so the pack works from any folder,
+  with Windows (`C:\\...`) or Mac (`/Users/...`) paths;
 - reads UTF-8 explicitly, because Excel's default for CSV is the Windows code page;
 - types every column with the en-US culture, so "0.03869" is read the same on a PC set to
   German or Arabic regional settings, where the decimal separator is a comma;
@@ -44,8 +45,10 @@ def m_script(file_name: str, df: pd.DataFrame) -> str:
 // Loads {file_name}. Synthetic data.
 let
     Folder = Text.TrimEnd(Excel.CurrentWorkbook(){{[Name = "DataFolder"]}}[Content]{{0}}[Column1], {{"\\", "/"}}),
+    // Windows paths use \, Mac paths use /. Join with whichever the folder cell uses.
+    Separator = if Text.Contains(Folder, "/") then "/" else "\\",
     Source = Csv.Document(
-        File.Contents(Folder & "\\{file_name}"),
+        File.Contents(Folder & Separator & "{file_name}"),
         [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]
     ),
     Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = false]),

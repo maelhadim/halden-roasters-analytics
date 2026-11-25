@@ -2,8 +2,10 @@
 // Loads _manifest.csv. Synthetic data.
 let
     Folder = Text.TrimEnd(Excel.CurrentWorkbook(){[Name = "DataFolder"]}[Content]{0}[Column1], {"\", "/"}),
+    // Windows paths use \, Mac paths use /. Join with whichever the folder cell uses.
+    Separator = if Text.Contains(Folder, "/") then "/" else "\",
     Source = Csv.Document(
-        File.Contents(Folder & "\_manifest.csv"),
+        File.Contents(Folder & Separator & "_manifest.csv"),
         [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]
     ),
     Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = false]),

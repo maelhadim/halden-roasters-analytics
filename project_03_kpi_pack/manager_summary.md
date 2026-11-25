@@ -30,6 +30,6 @@ them exactly. A few figures for the latest month are slightly off for reasons we
 made late on 30 June only reach us on 1 July. June's MRR, for example, will be restated by 61
 GBP when those files load.
 
-**What is left.** The automatic refresh only runs inside Excel on Windows, so its first real
+**What is left.** The automatic refresh only runs inside Excel, so its first real
 run needs to happen on a company laptop. The setup is a one-off, and the steps are written
 down.

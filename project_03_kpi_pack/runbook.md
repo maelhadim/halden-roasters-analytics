@@ -58,6 +58,36 @@ the files. Choose Data > Get Data > Query Options > Current Workbook > Privacy >
 Privacy Levels", then run the macro again. Both sources are on the same PC, so nothing leaves
 it.
 
+## One-time setup in Excel for Mac (Excel 365)
+
+The setup macro does not run on a Mac: it reads files with ADODB and creates connections
+through the Windows Power Query provider, and neither exists in Excel for Mac. The queries
+themselves do run, so on a Mac they are added by hand. Do `kpi_monthly` first; the other
+three are the same steps.
+
+1. Copy the whole `project_03_kpi_pack` folder to the Mac, keeping `data`, `powerquery` and
+   `vba` next to the workbook.
+2. On the Settings sheet, put the full path of the `data` folder in C4, for example
+   `/Users/you/Downloads/project_03_kpi_pack/data`. In Finder, select the `data` folder and
+   press Option+Cmd+C to copy its path.
+3. Go to Data_Monthly. Click any cell in the table, then on the Table tab choose Convert to
+   Range and confirm. Select A1:Z100 and choose Edit > Clear > All. Do not delete the sheet or
+   its columns: the Summary formulas point at them.
+4. Choose Data > Get Data (Power Query) > Blank query. In the Power Query editor choose
+   Advanced Editor, delete what is there, and paste the whole of `powerquery/kpi_monthly.pq`
+   (open it in TextEdit). Click OK.
+5. In the Query Settings pane on the right, rename the query to `kpi_monthly`.
+6. If Excel asks for access to the folder, grant it. Excel for Mac can only read folders it
+   has been given.
+7. Choose Close & Load To, then Existing worksheet, `=Data_Monthly!$A$1`. If your version
+   only offers Close & Load, it loads to a new sheet: select the whole table there, cut it
+   with Cmd+X, paste it at Data_Monthly A1, and delete the empty new sheet.
+8. Check that Data_Monthly has 31 rows starting at 2023-01, that Summary still shows 6,647
+   active subscribers for 2025-06, and that Checks says PASS.
+
+Repeat steps 3 to 8 for `kpi_country_monthly` on Data_Country, `revenue_bridge_monthly` on
+Data_Bridge and `kpi_manifest` on Data_Manifest.
+
 ## The monthly update
 
 1. Run `make ingest`, `make identity` and `make kpi` after the month's last daily files have

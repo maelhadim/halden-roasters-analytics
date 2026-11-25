@@ -134,3 +134,15 @@ Rejected: not committing the workbook and building it on demand. The pack is the
 deliverable, and a hiring manager clicking through the repository should be able to download
 it. Committing a binary is only safe if CI can prove it is current, so the build had to be
 repeatable.
+
+## 11. On a Mac, add the queries by hand
+
+Chosen: the same `.pq` scripts work on Windows and Mac. Each script joins the folder and the
+file name with `/` or `\`, whichever the folder cell uses. On a Mac the four queries are
+pasted into the Power Query editor by hand, following the runbook.
+
+Rejected: a Mac version of the macro. Excel for Mac has no ADODB to read the scripts as UTF-8
+and no Windows Power Query provider for the connection the macro creates. I could not test a
+Mac macro either, and an untested macro that half-runs is worse than four documented manual
+steps. I first built for Windows only, because I understood the pack's reader used Windows;
+the first real test was on a Mac, so the Mac route was added then.

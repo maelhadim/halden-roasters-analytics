@@ -18,7 +18,7 @@ is wrong. It had to stay in Excel, because that is what the founders open.
 
 ## The answer
 
-[`halden_kpi_pack.xlsx`](halden_kpi_pack.xlsx), built for Excel 365 on Windows. Pick a month
+[`halden_kpi_pack.xlsx`](halden_kpi_pack.xlsx), built for Excel 365. Pick a month
 in one cell and the Summary sheet shows that month against the previous month and the same
 month a year earlier, by country, and the revenue bridge from project 1. The monthly update is
 Data > Refresh All. Nothing is typed in by hand.
@@ -41,8 +41,9 @@ Summary sheet matched the warehouse in the five months I tested, and every one o
 broken copies I made was caught.
 
 What I could not test here is the Power Query refresh itself, because Power Query only runs
-inside Excel. The M scripts and the setup macro are written for Windows Excel 365 and have
-not yet been run on it. The runbook has the steps and what to look for.
+inside Excel. The setup macro needs Windows Excel. On a Mac the same scripts are added by
+hand in the Power Query editor. Neither route has been run in Excel yet; the runbook has
+the steps for both and what to look for.
 
 ## How it works
 
@@ -156,9 +157,10 @@ file in this folder changes, the workbook included.
 
 ## Limits
 
-- Power Query and the setup macro have not been run in Windows Excel yet. Everything that
-  can be checked without Excel has been. The first refresh on a real machine is the remaining
-  test, and the runbook lists what to check.
+- Power Query and the setup macro have not been run in Excel yet. The macro uses ADODB and
+  the Windows Power Query provider, so it only runs on Windows; on a Mac the four queries are
+  added by hand. Everything that can be checked without Excel has been. The first refresh
+  on a real machine is the remaining test, and the runbook lists what to check.
 - Excel may ask about privacy levels the first time a query combines the data folder cell
   with the CSV files. The runbook says what to choose.
 - The Trend charts cover the 30 months this copy was built with. When the history grows, the

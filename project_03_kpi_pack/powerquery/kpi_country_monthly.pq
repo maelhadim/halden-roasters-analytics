@@ -2,8 +2,10 @@
 // Loads kpi_country_monthly.csv. Synthetic data.
 let
     Folder = Text.TrimEnd(Excel.CurrentWorkbook(){[Name = "DataFolder"]}[Content]{0}[Column1], {"\", "/"}),
+    // Windows paths use \, Mac paths use /. Join with whichever the folder cell uses.
+    Separator = if Text.Contains(Folder, "/") then "/" else "\",
     Source = Csv.Document(
-        File.Contents(Folder & "\kpi_country_monthly.csv"),
+        File.Contents(Folder & Separator & "kpi_country_monthly.csv"),
         [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]
     ),
     Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = false]),
