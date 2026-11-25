@@ -41,14 +41,14 @@ def _columns(con, table: str) -> list[str]:
 def load_files(con, raw: Path, as_of: datetime | None) -> dict:
     inv = landing.inventory(raw, as_of)
     done = dict(con.execute("SELECT file_name, sha256 FROM meta_file_loads").fetchall())
-    todo = inv[[done.get(f) != s for f, s in zip(inv["file_name"], inv["sha256"])]]
+    to_load = inv[[done.get(f) != s for f, s in zip(inv["file_name"], inv["sha256"])]]
     run_id = (con.execute("SELECT coalesce(max(run_id), 0) + 1 FROM meta_runs").fetchone()[0])
     started = datetime.now(UTC)
     con.execute("INSERT INTO meta_runs (run_id, started_at_utc, as_of_utc, files_seen) VALUES (?, ?, ?, ?)",
                 [run_id, started, as_of, len(inv)])
-    log.info("run %d: %d files visible, %d new or changed", run_id, len(inv), len(todo))
+    log.info("run %d: %d files visible, %d new or changed", run_id, len(inv), len(to_load))
 
-    for (source, entity), group in todo.groupby(["source", "entity"], sort=True):
+    for (source, entity), group in to_load.groupby(["source", "entity"], sort=True):
         table, parse = PARSERS[(source, entity)]
         staged, rejected, ledger = [], [], []
         for f in group.itertuples(index=False):
@@ -84,12 +84,12 @@ def load_files(con, raw: Path, as_of: datetime | None) -> dict:
         log.info("%s/%s: %d files, %d staged, %d rejected", source, entity, len(names), len(stg), len(rej))
 
     con.execute("UPDATE meta_runs SET files_loaded = ?, files_unchanged = ?, finished_at_utc = ? WHERE run_id = ?",
-                [len(todo), len(inv) - len(todo), datetime.now(UTC), run_id])
+                [len(to_load), len(inv) - len(to_load), datetime.now(UTC), run_id])
     arr = landing.arrivals(inv, as_of or datetime.now(UTC))
     con.register("arr", arr)
     con.execute("CREATE OR REPLACE TABLE mart_file_arrivals AS SELECT * FROM arr")
     con.unregister("arr")
-    return {"run_id": run_id, "files_seen": len(inv), "files_loaded": len(todo)}
+    return {"run_id": run_id, "files_seen": len(inv), "files_loaded": len(to_load)}
 
 
 def build_models(con):

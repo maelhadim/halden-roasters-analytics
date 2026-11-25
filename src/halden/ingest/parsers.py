@@ -51,6 +51,10 @@ class Reject(Exception):
     """A record that cannot be staged. The message is the reject reason code."""
 
 
+class RowBalanceError(Exception):
+    """A parser lost or invented a record. Always a bug in the parser, never in the file."""
+
+
 @dataclass
 class ParseResult:
     source_file: str
@@ -67,7 +71,7 @@ class ParseResult:
 
     def check(self):
         if self.records_read != len(self.rows) + len(self.rejects) + self.blank_ignored:
-            raise AssertionError(f"{self.source_file}: {self.records_read} read != {len(self.rows)} staged + "
+            raise RowBalanceError(f"{self.source_file}: {self.records_read} read != {len(self.rows)} staged + "
                                  f"{len(self.rejects)} rejected + {self.blank_ignored} blank")
         return self
 

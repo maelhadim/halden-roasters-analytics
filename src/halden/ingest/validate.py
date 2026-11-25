@@ -217,11 +217,22 @@ def validate(db: Path, truth: Path, out: Path) -> bool:
     spot = spot.rename(columns={"_source_file": "source_file", "_source_line": "source_line"})
     spot = spot.merge(gto[["order_id", "created_at_utc", "customer_id", "total_amount"]], on="order_id",
                       suffixes=("", "_truth"))
+    # Headline figures the docs quote, so a test can check the docs against this run.
+    bridge = con.execute("SELECT * EXCLUDE (month) FROM mart_revenue_bridge_monthly").df()
+    headline = {k: round(float(v), 2) for k, v in bridge.sum().items()}
+    headline["bi_over_net_min_pct"] = round(float(((bridge.bi_reported_gbp / bridge.net_revenue_gbp) - 1).min() * 100), 2)
+    headline["bi_over_net_max_pct"] = round(float(((bridge.bi_reported_gbp / bridge.net_revenue_gbp) - 1).max() * 100), 2)
+    headline["bi_over_net_total_pct"] = round((headline["bi_reported_gbp"] / headline["net_revenue_gbp"] - 1) * 100, 2)
+    headline["largest_monthly_step4_gbp"] = round(float(bridge.step4_capture_month.abs().max()), 2)
+    headline["arrivals"] = {f"{s}_{a}": int(n) for s, a, n in con.execute(
+        "SELECT source, arrival_status, count(*) FROM mart_file_arrivals GROUP BY ALL ORDER BY ALL").fetchall()}
+    headline["rejects"] = {f"{s}_{r}": int(n) for s, r, n in con.execute(
+        "SELECT source, reject_reason, count(*) FROM rej_records GROUP BY ALL ORDER BY ALL").fetchall()}
     con.close()
 
     out.mkdir(parents=True, exist_ok=True)
     passed = all(c["passed"] for c in checks)
-    (out / "summary.json").write_text(json.dumps({"passed": passed, "checks": checks,
+    (out / "summary.json").write_text(json.dumps({"passed": passed, "checks": checks, "headline": headline,
                                                   "defects": scores.to_dict(orient="records")}, indent=2,
                                                  default=str) + "\n")
     md = ["# Validation report: project 1", "",

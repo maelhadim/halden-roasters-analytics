@@ -127,3 +127,23 @@ def test_arrivals_flag_late_and_missing():
     assert pp[date(2023, 1, 2)] == "missing"
     assert pp[date(2023, 1, 3)] == "late"
     assert pp[date(2023, 1, 6)] == "not_yet_due"
+
+
+def test_unknown_layouts_stop_the_load(tmp_path):
+    # A supplier changing its format must stop the run, not produce quietly wrong rows.
+    p = shop_file(tmp_path, [HEADER.replace("total_amount", "order_total"), ""])
+    with pytest.raises(ValueError, match="unexpected header"):
+        parse_shop_orders(p)
+    v3 = tmp_path / "payproc_transactions_20250701.txt"
+    v3.write_text("H|20250701|v3\nT|0|0.00\n")
+    with pytest.raises(ValueError, match="bad header"):
+        parse_payproc(v3)
+
+
+def test_row_balance_is_enforced():
+    from halden.ingest.parsers import ParseResult, RowBalanceError
+    res = ParseResult("x.csv")
+    res.records_read = 2
+    res.rows.append({})
+    with pytest.raises(RowBalanceError, match="2 read"):
+        res.check()
