@@ -43,5 +43,7 @@ A subscription ends in one of two ways, and churn counts both:
   The end time is five minutes after the last failed attempt, when the shop closes it.
 
 VAT is removed with the rate of the order's delivery country. These rates are simplified
-assumptions for roasted coffee (GB 0%, IE 0%, DE 7%, NL 9%), not tax advice. Refunds that
-cannot be linked to an order have no delivery country, so they use GB for GBP and DE for EUR.
+assumptions for roasted coffee (GB 0%, IE 0%, DE 7%, NL 9%), not tax advice. Transactions
+that cannot be linked to an order have no delivery country, so they use GB for GBP and DE for
+EUR. In practice these are refunds from the old system, plus any capture whose order is in a
+shop file after the reporting window.

@@ -15,7 +15,7 @@ it, and ends with a validation against the ground truth.
 | # | Project | Business problem | Status |
 | --- | --- | --- | --- |
 | 0 | [Data generator and conventions](project_00_data_generator/README.md) | Five projects need one consistent company to work on | Done |
-| 1 | Multi-source ingestion and revenue reconciliation | BI revenue does not match the card processor | Planned |
+| 1 | [Multi-source ingestion and revenue reconciliation](project_01_ingestion/README.md) | BI revenue does not match the card processor | Done |
 | 2 | Customer identity resolution | The customer count is inflated by duplicate accounts | Planned |
 | 3 | Monthly KPI pack in Excel and Power Query | The monthly report is rebuilt by hand | Planned |
 | 4 | Churn risk scoring with cost-based targeting | Cancellations rose after the February 2025 price increase | Planned |
@@ -36,6 +36,8 @@ make setup          # Python 3.12+, pinned dependencies
 make data           # builds data/raw and data/ground_truth, about 2 minutes
 make test
 make verify-data    # proves your build is byte-identical to the published one
+make ingest         # project 1: loads data/raw into data/warehouse.duckdb, about 40 seconds
+make validate       # project 1: checks the warehouse against the ground truth
 ```
 
 `data/` is not committed. It is about 134 MB and rebuilds the same way every time.
