@@ -19,3 +19,9 @@ jobs:
       # published checksums and the numbers in the docs still hold.
       - run: make verify-data
       - run: make test
+      - run: make ingest
+      - run: make validate
+      - run: make replay
+      # The committed reports must be exactly what this run produced. Run times are not
+      # in them, so any difference is a real change in the numbers.
+      - run: git diff --exit-code project_01_ingestion/validation/report.md project_01_ingestion/validation/summary.json

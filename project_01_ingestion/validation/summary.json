@@ -1,0 +1,324 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "check": "rows balance per file",
+      "passed": true,
+      "detail": "2,959 files; 1,092,692 records read = 1,092,609 staged + 51 rejected + 32 blank lines"
+    },
+    {
+      "check": "processor trailers match",
+      "passed": true,
+      "detail": "911 of 911 files match their trailer count and gross total"
+    },
+    {
+      "check": "orders: same set as truth",
+      "passed": true,
+      "detail": "254,387 orders in warehouse, 254,387 in truth, 0 missing, 0 extra"
+    },
+    {
+      "check": "orders: UTC creation time",
+      "passed": true,
+      "detail": "250,603 of 250,603 exact-time orders match to the second; 3,784 minute-precision orders are within 59 s"
+    },
+    {
+      "check": "orders: ambiguous autumn times resolved",
+      "passed": true,
+      "detail": "215 orders in the repeated hour; 215 resolved to the true instant; 0 left unresolved"
+    },
+    {
+      "check": "orders: totals and flags",
+      "passed": true,
+      "detail": "total_amount, is_test and paid status (paid by 30 June 2025) match truth for every order"
+    },
+    {
+      "check": "transactions: same set and amounts",
+      "passed": true,
+      "detail": "269,452 in warehouse, 269,452 in truth, 269,452 matched on txn_id and amount"
+    },
+    {
+      "check": "shipments: delivery dates and lateness",
+      "passed": true,
+      "detail": "252,221 shipments; 249,663 delivered, all with the true delivery date (100.00%) and lateness (100.00%)"
+    },
+    {
+      "check": "revenue: net and gross per month",
+      "passed": true,
+      "detail": "30 months; largest difference 0.00 GBP; 30-month net revenue 4,554,211.37 GBP vs truth 4,554,211.37"
+    },
+    {
+      "check": "paid orders per month",
+      "passed": true,
+      "detail": "29 months match exactly; June 2025 is 26 lower than truth, and all 26 are orders paid after 30 June or sitting in the 1 July shop file, which the warehouse cannot see"
+    },
+    {
+      "check": "late delivery rate per month",
+      "passed": true,
+      "detail": "largest difference 0.000000"
+    },
+    {
+      "check": "revenue bridge adds up",
+      "passed": true,
+      "detail": "largest monthly residual 0.02 GBP across 30 months"
+    },
+    {
+      "check": "defects: every in-scope defect found",
+      "passed": true,
+      "detail": "25 defect types scored, 14,994 of 14,994 defect records matched; 0 missed, 0 extra"
+    }
+  ],
+  "defects": [
+    {
+      "defect_code": "CRM_DUPLICATE_PERSON",
+      "manifest": 1243,
+      "found": NaN,
+      "matched": NaN,
+      "missed": NaN,
+      "extra": NaN,
+      "note": "handled in project 2"
+    },
+    {
+      "defect_code": "CRM_EMBEDDED_NEWLINE",
+      "manifest": 199,
+      "found": 199.0,
+      "matched": 199.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "CRM_STRAY_QUOTE",
+      "manifest": 6,
+      "found": 6.0,
+      "matched": 6.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "EXP_DUPLICATE_EVENT",
+      "manifest": 29,
+      "found": 29.0,
+      "matched": 29.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "EXP_LOG_OUTAGE",
+      "manifest": 126,
+      "found": NaN,
+      "matched": NaN,
+      "missed": NaN,
+      "extra": NaN,
+      "note": "handled in project 5"
+    },
+    {
+      "defect_code": "EXP_PERSON_BOTH_ARMS",
+      "manifest": 62,
+      "found": NaN,
+      "matched": NaN,
+      "missed": NaN,
+      "extra": NaN,
+      "note": "handled in project 5"
+    },
+    {
+      "defect_code": "FUL_CORRECTED_FILE",
+      "manifest": 902,
+      "found": 902.0,
+      "matched": 902.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "FUL_DUPLICATE_EVENT",
+      "manifest": 780,
+      "found": 780.0,
+      "matched": 780.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "FUL_ENCODING_CP1252",
+      "manifest": 132,
+      "found": 132.0,
+      "matched": 132.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "FUL_LATE_FILE",
+      "manifest": 2,
+      "found": 2.0,
+      "matched": 2.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "FUL_UNMAPPABLE_CHAR",
+      "manifest": 1029,
+      "found": 1029.0,
+      "matched": 1029.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "PAYPROC_DUPLICATE_ROW",
+      "manifest": 15,
+      "found": 15.0,
+      "matched": 15.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "PAYPROC_LATE_FILE",
+      "manifest": 4,
+      "found": 4.0,
+      "matched": 4.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "PAYPROC_MISSING_DAY",
+      "manifest": 1,
+      "found": 1.0,
+      "matched": 1.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "PAYPROC_SCHEMA_CHANGE",
+      "manifest": 1,
+      "found": 1.0,
+      "matched": 1.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "PAYPROC_UNLINKED_REFUND",
+      "manifest": 12,
+      "found": 12.0,
+      "matched": 12.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "SHOP_AMBIGUOUS_LOCAL_TIME",
+      "manifest": 215,
+      "found": 215.0,
+      "matched": 215.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "SHOP_BLANK_LINES",
+      "manifest": 16,
+      "found": 16.0,
+      "matched": 16.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "SHOP_DATE_FORMAT",
+      "manifest": 3784,
+      "found": 3784.0,
+      "matched": 3784.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "SHOP_EMAIL_FORMATTING",
+      "manifest": 1255,
+      "found": 1255.0,
+      "matched": 1255.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "SHOP_MISSING_POSTCODE",
+      "manifest": 3833,
+      "found": 3833.0,
+      "matched": 3833.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "SHOP_PHONE_SCIENTIFIC",
+      "manifest": 1786,
+      "found": 1786.0,
+      "matched": 1786.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "SHOP_RESEND",
+      "manifest": 272,
+      "found": 272.0,
+      "matched": 272.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "SHOP_TEST_ORDER",
+      "manifest": 37,
+      "found": 37.0,
+      "matched": 37.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "SHOP_TRAILING_DELIMITER",
+      "manifest": 30,
+      "found": 30.0,
+      "matched": 30.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "SHOP_TRUNCATED_FILE",
+      "manifest": 14,
+      "found": 14.0,
+      "matched": 14.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "SUBS_LATE_EVENT",
+      "manifest": 104,
+      "found": 104.0,
+      "matched": 104.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    },
+    {
+      "defect_code": "SUBS_REASON_QUOTED",
+      "manifest": 536,
+      "found": 536.0,
+      "matched": 536.0,
+      "missed": 0.0,
+      "extra": 0.0,
+      "note": ""
+    }
+  ]
+}
