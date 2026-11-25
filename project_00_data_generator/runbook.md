@@ -10,7 +10,7 @@ make data
 A normal build takes about 110 seconds and ends with a line like:
 
 ```
-INFO  halden.generator done in 106.2s: files=2959 bytes=133713807 defects=17025
+INFO  halden.generator done in 99.3s: files=2959 bytes=133716627 defects=17025
 ```
 
 If the file count or the byte count is different, the build is not the published one. Run

@@ -66,6 +66,20 @@ class PersonFactory:
             f.seed_instance(seed + i)
             self.fakers[c.code] = f
         self.n = 0
+        self.mailbox_owner: dict[str, str] = {}   # email -> person_id
+
+    def _claim(self, email: str, person_id: str | None) -> str:
+        """A mailbox belongs to one person. If the generated address is already someone
+        else's, add a number to the local part, the way a mail provider would refuse the
+        name and suggest john.smith2. No random draws here, so the rest of the build is unchanged."""
+        local, domain = email.split("@")
+        candidate, n = email, 1
+        while self.mailbox_owner.get(candidate.lower(), person_id) != person_id:
+            n += 1
+            candidate = f"{local}{n}@{domain}"
+        if person_id is not None:
+            self.mailbox_owner[candidate.lower()] = person_id
+        return candidate
 
     def new_person(self, country: str) -> dict:
         f = self.fakers[country]
@@ -75,7 +89,7 @@ class PersonFactory:
         if country == "DE" and self.rng.random() < 0.015:
             first, last = DE_EXTRA_NAMES[int(self.rng.integers(len(DE_EXTRA_NAMES)))]
         domain = EMAIL_DOMAINS[country][self.rng.integers(len(EMAIL_DOMAINS[country]))]
-        email = self._email(first, last, domain)
+        email = self._claim(self._email(first, last, domain), f"P{self.n:06d}")
         return {
             "person_id": f"P{self.n:06d}",
             "country_code": country,
@@ -111,8 +125,9 @@ class PersonFactory:
         for _ in range(5):
             e = self._email(person["first_name"], person["last_name"], domain)
             if e != person["email"]:
-                return e
-        return f"{ascii_fold(person['first_name']).lower()}.{self.rng.integers(100, 999)}@{domain}"
+                return self._claim(e, person.get("person_id"))
+        return self._claim(f"{ascii_fold(person['first_name']).lower()}.{self.rng.integers(100, 999)}@{domain}",
+                           person.get("person_id"))
 
     def new_address(self, country: str) -> dict:
         f = self.fakers[country]
