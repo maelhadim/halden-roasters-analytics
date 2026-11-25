@@ -1,0 +1,199 @@
+{
+  "passed": true,
+  "workbook_vs_warehouse": [
+    {
+      "month": "2023-01",
+      "values_compared": 54,
+      "mismatches": [],
+      "status": "All checks pass",
+      "passed": true
+    },
+    {
+      "month": "2023-02",
+      "values_compared": 54,
+      "mismatches": [],
+      "status": "All checks pass",
+      "passed": true
+    },
+    {
+      "month": "2024-01",
+      "values_compared": 54,
+      "mismatches": [],
+      "status": "All checks pass",
+      "passed": true
+    },
+    {
+      "month": "2024-06",
+      "values_compared": 54,
+      "mismatches": [],
+      "status": "All checks pass",
+      "passed": true
+    },
+    {
+      "month": "2025-06",
+      "values_compared": 54,
+      "mismatches": [],
+      "status": "All checks pass",
+      "passed": true
+    }
+  ],
+  "checks_catch_tampering": [
+    {
+      "tampering": "a refresh that loaded Data_Country only partly (last row missing)",
+      "overall": "FAIL",
+      "failed_checks": [
+        "Data_Country: rows match the manifest",
+        "Data_Country: net revenue total matches the manifest",
+        "Countries add up to the total for the selected month"
+      ],
+      "caught": true
+    },
+    {
+      "tampering": "June 2025 net revenue loaded as the text \"175478,81\"",
+      "overall": "FAIL",
+      "failed_checks": [
+        "Data_Monthly: net revenue total matches the manifest",
+        "Countries add up to the total for the selected month",
+        "Bridge ends on the same net revenue as the KPI table"
+      ],
+      "caught": true
+    },
+    {
+      "tampering": "a month typed into Summary!C5 that is not in the data",
+      "overall": "FAIL",
+      "failed_checks": [
+        "Countries add up to the total for the selected month",
+        "Selected month is in the data"
+      ],
+      "caught": true
+    }
+  ],
+  "warehouse_vs_truth": [
+    {
+      "metric": "active_subscribers",
+      "months_different": 2,
+      "largest_difference": 1.0,
+      "differences": {
+        "2024-09": -1.0,
+        "2024-10": -1.0
+      },
+      "explained_by": "identity resolution merged one pair of people wrongly (project 2), which moves a count by 1",
+      "passed": true
+    },
+    {
+      "metric": "active_subscription_accounts",
+      "months_different": 0,
+      "largest_difference": 0.0,
+      "differences": {},
+      "explained_by": "",
+      "passed": true
+    },
+    {
+      "metric": "new_subscribers",
+      "months_different": 2,
+      "largest_difference": 1.0,
+      "differences": {
+        "2024-09": -1.0,
+        "2025-06": -1.0
+      },
+      "explained_by": "identity resolution merged one pair of people wrongly (project 2), which moves a count by 1",
+      "passed": true
+    },
+    {
+      "metric": "churned_subscribers",
+      "months_different": 2,
+      "largest_difference": 1.0,
+      "differences": {
+        "2024-11": -1.0,
+        "2025-06": -1.0
+      },
+      "explained_by": "identity resolution merged one pair of people wrongly (project 2), which moves a count by 1",
+      "passed": true
+    },
+    {
+      "metric": "monthly_churn_rate",
+      "months_different": 3,
+      "largest_difference": 0.00015,
+      "differences": {
+        "2024-10": 1e-05,
+        "2024-11": -0.00015,
+        "2025-06": -0.00015
+      },
+      "explained_by": "identity resolution merged one pair of people wrongly (project 2), which moves a count by 1",
+      "passed": true
+    },
+    {
+      "metric": "mrr_gbp",
+      "months_different": 1,
+      "largest_difference": 61.48,
+      "differences": {
+        "2025-06": 61.48
+      },
+      "explained_by": "subscriptions whose start or cancellation on 30 June arrived in the 1 July file",
+      "passed": true
+    },
+    {
+      "metric": "gross_revenue_gbp",
+      "months_different": 0,
+      "largest_difference": 0.0,
+      "differences": {},
+      "explained_by": "",
+      "passed": true
+    },
+    {
+      "metric": "net_revenue_gbp",
+      "months_different": 0,
+      "largest_difference": 0.0,
+      "differences": {},
+      "explained_by": "",
+      "passed": true
+    },
+    {
+      "metric": "paid_orders",
+      "months_different": 1,
+      "largest_difference": 26.0,
+      "differences": {
+        "2025-06": -26.0
+      },
+      "explained_by": "orders paid after 30 June or sitting in the 1 July shop file, which the warehouse cannot see (project 1)",
+      "passed": true
+    },
+    {
+      "metric": "late_delivery_rate",
+      "months_different": 0,
+      "largest_difference": 0.0,
+      "differences": {},
+      "explained_by": "",
+      "passed": true
+    }
+  ],
+  "june_2025_mrr_gap": {
+    "subscriptions": [
+      {
+        "subscription_id": "S008289",
+        "side": "warehouse only",
+        "started_at_utc": "2023-11-13 16:21:07+00:00",
+        "ended_at_utc": "2025-06-30 19:33:30+00:00",
+        "mrr_effect_gbp": 73.67
+      },
+      {
+        "subscription_id": "S018868",
+        "side": "truth only",
+        "started_at_utc": "2025-06-30 23:19:22+00:00",
+        "ended_at_utc": null,
+        "mrr_effect_gbp": -12.19
+      }
+    ],
+    "explained_gbp": 61.48
+  },
+  "revenue_without_country": {
+    "EUR": {
+      "transactions": 5,
+      "net_gbp": -64.48
+    },
+    "GBP": {
+      "transactions": 8,
+      "net_gbp": -178.5
+    }
+  }
+}
