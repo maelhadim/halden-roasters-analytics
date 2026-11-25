@@ -1,0 +1,4 @@
+# Decisions made on mart_identity_review_queue. They override the model on every run.
+# decision is "same" (merge these two accounts) or "different" (never merge them).
+# Add a row per pair you review; leave the queue empty only by deciding, never by deleting.
+left_id,right_id,decision,reviewed_by,reviewed_on,note

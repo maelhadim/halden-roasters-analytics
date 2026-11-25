@@ -104,3 +104,17 @@ The true effect is a 40% relative cut in the chance of cancelling for high-risk 
   pattern), but it is not a real postcode and does not belong to the city. No analysis in this
   portfolio depends on addresses being real, and making them real means geocoding data.
 - VAT rates are simplified assumptions for roasted coffee, not tax advice.
+
+## 11. One mailbox, one person (changed in project 2)
+
+Chosen: when the generator builds an email address that already belongs to another person,
+it adds a number to the local part, the way a mail provider suggests `john.smith2`. A person
+keeps their own address across accounts, which is the signal project 2 is meant to find.
+
+The first build did not check this. Faker draws names from a limited list and I built
+addresses from names, so two unrelated people could both be `jbailey@outlook.com`. Project 2
+found it while profiling: 55 pairs of different people sharing a mailbox in the development
+half alone. That is not a realistic defect. A shared family address is real, but these were
+strangers. The fix makes no extra random draws, so every count in this build is unchanged.
+Only those email strings and the checksums changed. See `docs/change_log.md`.
+

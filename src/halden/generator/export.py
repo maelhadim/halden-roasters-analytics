@@ -364,6 +364,9 @@ class Exporter:
         people_factory_rng = np.random.default_rng(int(self.rng.integers(0, 2**31)))
         from .identities import PersonFactory
         pf = PersonFactory(people_factory_rng, cfg.SEED + 7)
+        # A new address must not be someone else's.
+        pf.mailbox_owner = {e.lower(): p for e, p in zip(self.w.persons["email"], self.w.persons["person_id"])}
+        pf.mailbox_owner.update({e.lower(): p for e, p in zip(acc["email"], acc["person_id"])})
         state = {}
         for a in acc.itertuples(index=False):
             note = ""
@@ -380,6 +383,7 @@ class Exporter:
             }
         stray = set(acc["customer_id"].iloc[self.rng.choice(len(acc), size=6, replace=False)].tolist())
 
+        acc_person = dict(zip(acc["customer_id"], acc["person_id"]))
         person_first: dict[str, str] = {}
         for a in acc.itertuples(index=False):
             person_first.setdefault(a.person_id, a.customer_id)
@@ -402,7 +406,7 @@ class Exporter:
                     st.update(pf.new_address(st["country_code"]))
                 elif c.field == "email":
                     person = {"first_name": st["first_name"], "last_name": st["last_name"], "email": st["email"],
-                              "country_code": st["country_code"]}
+                              "country_code": st["country_code"], "person_id": acc_person[c.customer_id]}
                     st["email"] = pf.other_email(person, work=False)
                 else:
                     st["marketing_opt_in"] = "N" if st["marketing_opt_in"] == "Y" else "Y"

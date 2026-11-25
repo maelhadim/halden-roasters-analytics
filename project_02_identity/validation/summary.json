@@ -1,0 +1,198 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "check": "every account has exactly one person",
+      "passed": true,
+      "detail": "18,620 accounts in the warehouse, 18,620 in the truth"
+    },
+    {
+      "check": "holdout precision and recall at least 0.99",
+      "passed": true,
+      "detail": "precision 0.9981, recall 1.0000 on 530 true pairs (1 false merges, 0 missed)"
+    },
+    {
+      "check": "people with an account",
+      "passed": true,
+      "detail": "17,616 resolved vs 17,617 true; 1,004 accounts merged away vs 1,003 true duplicates"
+    },
+    {
+      "check": "subscriber metrics per month",
+      "passed": true,
+      "detail": "30 months; largest monthly difference: active_subscribers 1, active_subscription_accounts 0, new_subscribers 1, churned_subscribers 1"
+    },
+    {
+      "check": "new customers per month",
+      "passed": true,
+      "detail": "30 months; largest monthly difference 1; 13,416 new customers vs 13,417 true, from 14,420 new accounts"
+    }
+  ],
+  "pairs": {
+    "development": {
+      "true_pairs": 527,
+      "predicted_pairs": 527,
+      "correct": 527,
+      "false_merges": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "holdout": {
+      "true_pairs": 530,
+      "predicted_pairs": 531,
+      "correct": 530,
+      "false_merges": 1,
+      "missed": 0,
+      "precision": 0.9981,
+      "recall": 1.0
+    },
+    "all": {
+      "true_pairs": 1057,
+      "predicted_pairs": 1058,
+      "correct": 1057,
+      "false_merges": 1,
+      "missed": 0,
+      "precision": 0.9991,
+      "recall": 1.0
+    }
+  },
+  "people_resolved": 17616,
+  "people_true": 17617,
+  "review_queue": {
+    "pairs": 2,
+    "same_person": 0
+  },
+  "duplicates_by_origin": [
+    {
+      "origin": "migration_duplicate",
+      "duplicates": 168,
+      "found": 168
+    },
+    {
+      "origin": "parallel_account",
+      "duplicates": 260,
+      "found": 260
+    },
+    {
+      "origin": "winback_new_account",
+      "duplicates": 575,
+      "found": 575
+    }
+  ],
+  "errors": [
+    {
+      "kind": "false merge",
+      "left_id": "C004579",
+      "right_id": "C013031",
+      "half": "holdout",
+      "left": "Rachel Young, London",
+      "right": "Rachael Young, London"
+    }
+  ],
+  "account_overcount_pct": {
+    "min": 0.27,
+    "max": 1.18,
+    "last_month": 1.01
+  },
+  "june_2025": {
+    "active_subscribers": 6647,
+    "active_subscription_accounts": 6714,
+    "new_subscribers": 457,
+    "churned_subscribers": 382
+  },
+  "new_customers": {
+    "new_accounts": 14420,
+    "new_customers": 13416,
+    "extra_accounts": 1004
+  },
+  "accounts": 18620,
+  "decisions": {
+    "merge": 1058,
+    "no": 2666,
+    "review": 2
+  },
+  "phone_pairs": {
+    "total": 3636,
+    "not_merged": 2578
+  },
+  "churn_rate_mean": {
+    "people": 0.06426,
+    "accounts": 0.0648
+  },
+  "threshold_sensitivity": [
+    {
+      "threshold": 0.5,
+      "precision": 0.9981,
+      "recall": 1.0,
+      "false_merges": 1,
+      "missed": 0
+    },
+    {
+      "threshold": 0.9,
+      "precision": 1.0,
+      "recall": 1.0,
+      "false_merges": 0,
+      "missed": 0
+    },
+    {
+      "threshold": 0.99,
+      "precision": 1.0,
+      "recall": 1.0,
+      "false_merges": 0,
+      "missed": 0
+    },
+    {
+      "threshold": 0.9999,
+      "precision": 1.0,
+      "recall": 1.0,
+      "false_merges": 0,
+      "missed": 0
+    }
+  ],
+  "stress": [
+    {
+      "field": "phone",
+      "change": "blank",
+      "share": 0.3,
+      "precision": 0.9978,
+      "recall": 0.8717,
+      "false_merges": 1,
+      "missed": 68,
+      "review_pairs": 94,
+      "review_pairs_same_person": 53
+    },
+    {
+      "field": "phone",
+      "change": "change",
+      "share": 0.3,
+      "precision": 0.9978,
+      "recall": 0.8717,
+      "false_merges": 1,
+      "missed": 68,
+      "review_pairs": 121,
+      "review_pairs_same_person": 53
+    },
+    {
+      "field": "email",
+      "change": "blank",
+      "share": 0.3,
+      "precision": 0.9981,
+      "recall": 1.0,
+      "false_merges": 1,
+      "missed": 0,
+      "review_pairs": 2,
+      "review_pairs_same_person": 0
+    },
+    {
+      "field": "postcode",
+      "change": "blank",
+      "share": 0.5,
+      "precision": 0.9944,
+      "recall": 1.0,
+      "false_merges": 3,
+      "missed": 0,
+      "review_pairs": 4,
+      "review_pairs_same_person": 0
+    }
+  ]
+}
