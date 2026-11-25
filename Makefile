@@ -1,7 +1,7 @@
 PY ?= python3
 RUN = PYTHONPATH=src $(PY) -m
 
-.PHONY: setup data test verify-data ingest validate replay
+.PHONY: setup data test verify-data ingest validate replay identity identity-validate
 
 setup:
 	$(PY) -m pip install -e ".[dev]"
@@ -28,3 +28,11 @@ validate:
 
 replay:
 	$(RUN) halden.ingest.replay
+
+# Project 2. Needs `make ingest` first; writes its tables into the same warehouse.
+identity:
+	$(RUN) halden.identity.profile
+	$(RUN) halden.identity run
+
+identity-validate:
+	$(RUN) halden.identity validate

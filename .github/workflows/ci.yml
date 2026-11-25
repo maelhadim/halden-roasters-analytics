@@ -18,10 +18,13 @@ jobs:
       # The build is the slow part (about two minutes) but it is the only way to know the
       # published checksums and the numbers in the docs still hold.
       - run: make verify-data
-      - run: make test
       - run: make ingest
       - run: make validate
       - run: make replay
+      - run: make identity
+      - run: make identity-validate
+      # Last, so the tests that need the warehouse run too instead of being skipped.
+      - run: make test
       # The committed reports must be exactly what this run produced. Run times are kept
       # out of them on purpose, so any difference is a real change in the numbers.
-      - run: git diff --exit-code project_01_ingestion/validation/
+      - run: git diff --exit-code project_01_ingestion/validation/ project_02_identity/validation/ project_02_identity/profiling_report.md
