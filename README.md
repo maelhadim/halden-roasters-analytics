@@ -17,7 +17,7 @@ it, and ends with a validation against the ground truth.
 | 0 | [Data generator and conventions](project_00_data_generator/README.md) | Five projects need one consistent company to work on | Done |
 | 1 | [Multi-source ingestion and revenue reconciliation](project_01_ingestion/README.md) | BI revenue does not match the card processor | Done |
 | 2 | [Customer identity resolution](project_02_identity/README.md) | The customer count is inflated by duplicate accounts | Done |
-| 3 | Monthly KPI pack in Excel and Power Query | The monthly report is rebuilt by hand | Planned |
+| 3 | [Monthly KPI pack in Excel and Power Query](project_03_kpi_pack/README.md) | The monthly report is rebuilt by hand | Done |
 | 4 | Churn risk scoring with cost-based targeting | Cancellations rose after the February 2025 price increase | Planned |
 | 5 | Retention offer A/B test and decision memo | Does a 30% offer pay for itself, and for whom? | Planned |
 
@@ -40,6 +40,8 @@ make ingest         # project 1: loads data/raw into data/warehouse.duckdb, abou
 make validate       # project 1: checks the warehouse against the ground truth
 make identity       # project 2: resolves accounts into people, about 2 seconds
 make identity-validate
+make kpi            # project 3: KPI files, Power Query scripts and the Excel pack, about 1 second
+make kpi-validate   # project 3: recalculates the pack in LibreOffice and checks it
 ```
 
 `data/` is not committed. It is about 134 MB and rebuilds the same way every time.
