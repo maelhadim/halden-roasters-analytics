@@ -1,7 +1,7 @@
 PY ?= python3
 RUN = PYTHONPATH=src $(PY) -m
 
-.PHONY: setup data test verify-data ingest validate replay identity identity-validate
+.PHONY: setup data test verify-data ingest validate replay identity identity-validate kpi kpi-validate
 
 setup:
 	$(PY) -m pip install -e ".[dev]"
@@ -36,3 +36,12 @@ identity:
 
 identity-validate:
 	$(RUN) halden.identity validate
+
+# Project 3. Needs `make identity` first. Writes the CSV files, Power Query scripts and workbook.
+kpi:
+	$(RUN) halden.kpi extract
+	$(RUN) halden.kpi workbook
+
+# Needs LibreOffice (soffice) to recalculate the workbook.
+kpi-validate:
+	$(RUN) halden.kpi validate
