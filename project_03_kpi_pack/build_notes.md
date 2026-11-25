@@ -37,7 +37,12 @@ for the first Excel run.
 **Two builds, two different files.** The plan was to commit the workbook and have CI rebuild
 it and compare. Two builds of the same data differed: an `.xlsx` is a zip, and openpyxl
 stamps every part, and the file's "modified" property, with the build time. Rewriting the zip
-with one fixed time, and the property with one fixed date, made builds byte-identical.
+with one fixed time, and the property with one fixed date, made builds byte-identical. Then
+CI still built a different file. The CSV files it was built from matched mine byte for
+byte, so the difference was in the compression: two zlib builds can compress the same bytes
+differently, and the CI runner's Python is not built like mine. The
+workbook is now written uncompressed. It is 140 KB instead of 34 KB, which is a fair price
+for a file CI can prove is current.
 
 **Hidden helper cells.** The Summary sheet needs the row of the selected month, the month
 before and the year-ago month. I put them in a hidden column instead of repeating a `MATCH`

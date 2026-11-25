@@ -398,8 +398,10 @@ def _fix_zip_times(path: Path) -> None:
     can diff the workbook like any other committed output."""
     with zipfile.ZipFile(path) as z:
         parts = [(i.filename, z.read(i.filename)) for i in z.infolist()]
-    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
+    # Stored, not compressed: two zlib builds can compress the same bytes differently, which
+    # made the CI build differ from mine. The file grows from about 34 KB to 140 KB.
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_STORED) as z:
         for name, data in parts:
             if name == "docProps/core.xml":   # openpyxl always writes the save time here
                 data = re.sub(rb"(<dcterms:modified[^>]*>)[^<]*", rb"\g<1>2025-07-01T00:00:00Z", data)
-            z.writestr(zipfile.ZipInfo(name, date_time=(2025, 7, 1, 0, 0, 0)), data, zipfile.ZIP_DEFLATED)
+            z.writestr(zipfile.ZipInfo(name, date_time=(2025, 7, 1, 0, 0, 0)), data, zipfile.ZIP_STORED)
