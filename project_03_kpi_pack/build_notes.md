@@ -37,12 +37,16 @@ for the first Excel run.
 **Two builds, two different files.** The plan was to commit the workbook and have CI rebuild
 it and compare. Two builds of the same data differed: an `.xlsx` is a zip, and openpyxl
 stamps every part, and the file's "modified" property, with the build time. Rewriting the zip
-with one fixed time, and the property with one fixed date, made builds byte-identical. Then
-CI still built a different file. The CSV files it was built from matched mine byte for
-byte, so the difference was in the compression: two zlib builds can compress the same bytes
-differently, and the CI runner's Python is not built like mine. The
-workbook is now written uncompressed. It is 140 KB instead of 34 KB, which is a fair price
-for a file CI can prove is current.
+with one fixed time, and the property with one fixed date, made builds byte-identical on my machine. CI
+still built a different file. The CSV files it was built from matched mine byte for byte, so
+I guessed the compression differed and wrote the zip uncompressed. CI still failed, so the
+guess was wrong. I added a CI step that prints the first difference inside each part of the
+zip. It showed the XML itself: `Id="rId1"/>` in my file, `Id="rId1" />` in CI's. openpyxl
+writes XML with lxml when lxml is installed and with Python's own library when it is not.
+I had lxml; the CI runner did not. `halden.kpi` now tells openpyxl not to use lxml, and the
+build refuses to run if it is already using it. I kept the zip uncompressed (140 KB instead of
+34 KB) because it costs little and removes one more thing that could differ between
+machines. The diagnostic step stays in CI for next time.
 
 **Hidden helper cells.** The Summary sheet needs the row of the selected month, the month
 before and the year-ago month. I put them in a hidden column instead of repeating a `MATCH`

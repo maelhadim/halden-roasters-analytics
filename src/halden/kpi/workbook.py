@@ -28,6 +28,12 @@ from openpyxl.worksheet.table import Table, TableStyleInfo
 
 from .powerquery import QUERIES
 
+import openpyxl.xml   # noqa: E402
+
+if openpyxl.xml.LXML:   # openpyxl was imported before halden.kpi set OPENPYXL_LXML
+    raise RuntimeError("openpyxl is using lxml, so the workbook would not be reproducible. "
+                       "Import halden.kpi before openpyxl, or set OPENPYXL_LXML=False.")
+
 INK, MUTED, RULE, HEAD_BG, OK_BG, BAD_BG = "1F2933", "616E7C", "D3D8DE", "EEF1F4", "DFF3E4", "FBE0E0"
 TITLE = Font(name="Calibri", size=16, bold=True, color=INK)
 H2 = Font(name="Calibri", size=12, bold=True, color=INK)
@@ -398,8 +404,8 @@ def _fix_zip_times(path: Path) -> None:
     can diff the workbook like any other committed output."""
     with zipfile.ZipFile(path) as z:
         parts = [(i.filename, z.read(i.filename)) for i in z.infolist()]
-    # Stored, not compressed: two zlib builds can compress the same bytes differently, which
-    # made the CI build differ from mine. The file grows from about 34 KB to 140 KB.
+    # Stored, not compressed, so the bytes cannot depend on the machine's zlib build. The file
+    # grows from about 34 KB to 140 KB.
     with zipfile.ZipFile(path, "w", zipfile.ZIP_STORED) as z:
         for name, data in parts:
             if name == "docProps/core.xml":   # openpyxl always writes the save time here
