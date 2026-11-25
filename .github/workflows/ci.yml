@@ -1,0 +1,21 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: make setup
+      # The build is the slow part (about two minutes) but it is the only way to know the
+      # published checksums and the numbers in the docs still hold.
+      - run: make verify-data
+      - run: make test
