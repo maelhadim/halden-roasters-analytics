@@ -8,7 +8,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -23,8 +23,32 @@ jobs:
       - run: make replay
       - run: make identity
       - run: make identity-validate
+      # LibreOffice recalculates the Excel pack with no screen, so its formulas are tested too.
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libreoffice-calc
+      - run: make kpi
+      - run: make kpi-validate
+      # If the rebuilt workbook differs from the committed one, say which part of the zip and where.
+      - name: compare the rebuilt workbook with the committed one
+        run: |
+          git show HEAD:project_03_kpi_pack/halden_kpi_pack.xlsx > "$RUNNER_TEMP/committed.xlsx"
+          python - "$RUNNER_TEMP/committed.xlsx" project_03_kpi_pack/halden_kpi_pack.xlsx <<'PY'
+          import sys, zipfile
+          a, b = (zipfile.ZipFile(p) for p in sys.argv[1:])
+          na, nb = [i.filename for i in a.infolist()], [i.filename for i in b.infolist()]
+          if na != nb:
+              print("parts differ:", na, nb)
+          for name in na:
+              x, y = a.read(name), b.read(name) if name in nb else b""
+              if x != y:
+                  i = next((k for k in range(min(len(x), len(y))) if x[k] != y[k]), min(len(x), len(y)))
+                  print(f"{name}: committed {x[max(0, i - 150):i + 150]!r}")
+                  print(f"{name}: rebuilt   {y[max(0, i - 150):i + 150]!r}")
+          for i, j in zip(a.infolist(), b.infolist()):
+              if (i.date_time, i.external_attr, i.create_system, i.compress_type) != (j.date_time, j.external_attr, j.create_system, j.compress_type):
+                  print("header differs:", i.filename, i.date_time, j.date_time, i.external_attr, j.external_attr, i.create_system, j.create_system)
+          PY
       # Last, so the tests that need the warehouse run too instead of being skipped.
       - run: make test
       # The committed reports must be exactly what this run produced. Run times are kept
       # out of them on purpose, so any difference is a real change in the numbers.
-      - run: git diff --exit-code project_01_ingestion/validation/ project_02_identity/validation/ project_02_identity/profiling_report.md
+      - run: git diff --exit-code project_01_ingestion/validation/ project_02_identity/validation/ project_02_identity/profiling_report.md project_03_kpi_pack/data/ project_03_kpi_pack/powerquery/ project_03_kpi_pack/validation/ project_03_kpi_pack/halden_kpi_pack.xlsx

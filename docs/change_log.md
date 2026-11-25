@@ -5,6 +5,7 @@ made by a later project to an earlier one is recorded here and in both projects'
 
 | Date | Change | Why | Affects |
 | --- | --- | --- | --- |
+| 2026-11-25 | openpyxl 3.1.5 joins the pinned dependencies, and CI installs LibreOffice. | Project 3 builds the Excel pack with openpyxl and recalculates it in LibreOffice to test its formulas. | `pyproject.toml`, CI |
 | 2026-11-25 | `docs/conventions.md` now lists the `meta_` and `ref_` table prefixes. | Project 1 introduced `meta_file_loads`, `meta_runs` and `ref_vat_rates` without adding the prefixes to the conventions; the project 2 consistency check found the gap. | `docs/conventions.md` |
 | 2026-11-25 | New metric `new_customers`: people whose first ever account opened in the month. | Marketing counted new accounts as new customers. Project 2 shows 1,004 of the 14,420 accounts opened from January 2023 to June 2025 belonged to someone who already had one. | `docs/metrics.md`, projects 2 and 3 |
 | 2026-11-25 | The generator no longer gives two unrelated people the same email address. If a generated address is taken, a number is added to it (`john.smith2@...`). | Project 2 found 55 pairs of different people sharing a mailbox in the development half alone. A real mailbox belongs to one person, so this was a flaw in the simulation, not a realistic defect. The fix makes no random draws, so every count in the build is unchanged; only those email strings and the checksums changed. Every project 1 report came out byte-identical. | Project 0 checksums, project 2 |

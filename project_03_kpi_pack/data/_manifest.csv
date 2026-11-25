@@ -1,0 +1,4 @@
+file_name,rows,columns,control_column,control_total,sha256
+kpi_monthly.csv,30,17,net_revenue_gbp,4554211.37,045a7e6ebbe34dcfc28c9a5349421573bc57f89c91a1729e685a0de8c95f4311
+kpi_country_monthly.csv,120,5,net_revenue_gbp,4554211.41,312ce12d2d85afc84ef481067e70aa93082a8087b8e6cc216a541eeab43b645e
+revenue_bridge_monthly.csv,30,11,net_revenue_gbp,4554211.37,0460dc47c45cbf714fee5c0e41909d64803e76d958d269da216441a4b3322fcb
