@@ -126,7 +126,7 @@ def validate(db: Path, truth: Path, out: Path) -> bool:
     gto["created"] = pd.to_datetime(gto["created_at_utc"], utc=True)
     gto = gto[gto["created"].dt.tz_convert("Europe/London").dt.date <= pd.Timestamp("2025-06-30").date()]
     io_ = con.execute("SELECT order_id, created_at_utc, created_at_quality, total_amount, is_test, is_paid "
-                      "FROM int_orders").df()
+                      "FROM int_orders ORDER BY order_id").df()   # sorted, so the seeded spot-check sample is stable
     check("orders: same set as truth", set(io_["order_id"]) == set(gto["order_id"]) and io_["order_id"].is_unique,
           f"{len(io_):,} orders in warehouse, {len(gto):,} in truth, "
           f"{len(set(gto['order_id']) - set(io_['order_id'])):,} missing, "

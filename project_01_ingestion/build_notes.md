@@ -41,3 +41,10 @@ fulfilment file for the week of 26 December 2022 was missing. That week contains
 the window, Sunday 1 January 2023, when nothing ships, so no file was ever due. The weekly
 calendar now starts on the first Monday inside the window. I only noticed because the count
 of missing files was one higher than the defect manifest said.
+
+**CI disagreed with my laptop about which orders were random.** The first CI run passed all 13
+checks and then failed the step that compares the committed report with the one it had just
+produced. The ten spot-check orders were different. The sample was seeded, but it was drawn by
+position from `int_orders` read without `ORDER BY`, and DuckDB does not promise any row order
+without one. Same seed, different rows. The query now sorts by `order_id` first. Validating the
+replay warehouse, which was built in three runs instead of one, now gives a byte-identical report.
