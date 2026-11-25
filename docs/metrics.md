@@ -15,9 +15,9 @@ and `docs/change_log.md` change in the same commit.
   date is used.
 - **Test orders** (any order whose email ends in `@haldenroasters.test`) are excluded from
   every metric, together with their payments and refunds.
-- **A subscriber is a person, not an account.** Until project 2 resolves identities, the
-  only count available is per account. That count is reported as
-  `active_subscription_accounts` and must not be presented as the number of subscribers.
+- **A subscriber is a person, not an account.** Project 2 resolves accounts into people
+  (`int_customer_person`). The per-account count is still reported, as
+  `active_subscription_accounts`, but it must not be presented as the number of subscribers.
 
 ## Definitions
 
@@ -26,6 +26,7 @@ and `docs/change_log.md` change in the same commit.
 | `active_subscribers` | People with at least one subscription that started on or before 23:59:59 UTC on the last day of the month, and that had not ended by then. |
 | `active_subscription_accounts` | The same count, per `customer_id` instead of per person. It is always greater than or equal to `active_subscribers`. |
 | `new_subscribers` | People active at the end of the month who were not active at the end of the previous month. Returning customers count as new. |
+| `new_customers` | People whose first ever account was opened in the month. An account opened by someone who already had one is not a new customer, however long they were away. |
 | `churned_subscribers` | People active at the end of the previous month who are not active at the end of this month. |
 | `monthly_churn_rate` | `churned_subscribers` divided by `active_subscribers` at the end of the previous month. |
 | `mrr_gbp` | For every subscription active at month end: its list price on that date, minus VAT, as a monthly amount (fortnightly plans multiplied by 26/12), converted to GBP at the month-end rate. Discounts are ignored, because MRR measures the size of the base, not what was collected. |

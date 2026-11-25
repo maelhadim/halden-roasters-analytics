@@ -52,6 +52,13 @@ Tables move through four layers. The prefix says which layer a table is in.
 | `int_` | Joined, deduplicated, identity-resolved | one row per business entity |
 | `mart_` | Business-ready tables used by reports and models | stated per table |
 
+Two kinds of supporting table sit beside the layers:
+
+| Prefix | Contents | Grain |
+| --- | --- | --- |
+| `meta_` | The load ledger and run log: what was loaded, when, and whether it balanced | one row per file or run |
+| `ref_` | Reference data and fitted parameters, such as VAT rates or matching weights | stated per table |
+
 ## Columns
 
 - `snake_case`, lower case, English. German partner headers are renamed in staging and the
